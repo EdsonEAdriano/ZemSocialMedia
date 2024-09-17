@@ -1,0 +1,298 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #15202B;
+    color: white;
+    display: flex;
+    flex-direction: column; /* Alterado para suportar telas pequenas */
+}
+
+.sidebar.active {
+    transform: translateX(0);
+}
+
+.sidebar {
+    transform: translateX(-100%);
+    display: none;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    background-color: #15202B;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    padding: 10px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    padding: 15px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+    background-color: #1D9BF0;
+}
+
+.sidebar .post-button {
+    background-color: #1D9BF0;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 30px;
+    font-size: 18px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.sidebar .post-button:hover {
+    background-color: #1A8CD8;
+}
+
+.sidebar .profile-section {
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
+}
+
+.sidebar .profile-section img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.sidebar .profile-section .profile-name {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon {
+    margin-right: 15px;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+    background-color: #192734;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.post-box {
+    background-color: #253341;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.post-box textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    resize: none;
+}
+
+.post-box textarea::placeholder {
+    color: #8899A6;
+}
+
+.post-box .post-button {
+    float: right;
+    background-color: #1D9BF0;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 30px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.post {
+    background-color: #253341;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.post .profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.post .profile-info img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.post .profile-info .name {
+    font-weight: bold;
+}
+
+.post .profile-info .username {
+    color: #8899A6;
+}
+
+.post .content {
+    margin-top: 10px;
+    color: #E1E8ED;
+}
+
+.post .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    color: #8899A6;
+}
+
+.trends {
+    width: 350px;
+    padding: 20px;
+    background-color: #192734;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    overflow-y: scroll;
+}
+
+.trends .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    background-color: #253341;
+    color: white;
+}
+
+.trends h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.trends .trend {
+    margin-bottom: 15px;
+}
+
+.trends .trend p {
+    margin: 5px 0;
+    color: #8899A6;
+}
+
+.trends .trend strong {
+    color: white;
+}
+
+.trends .who-to-follow {
+    margin-top: 20px;
+}
+
+.trends .who-to-follow .follow-suggestion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.trends .who-to-follow .follow-suggestion img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.trends .who-to-follow .follow-suggestion div {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.trends .who-to-follow button {
+    background-color: #1D9BF0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.trends .who-to-follow button:hover {
+    background-color: #1A8CD8;
+}
+
+.trends .messages {
+    margin-top: 20px;
+}
+
+.trends .messages h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Scrollbar customization */
+body, .trends, .main-content {
+    scrollbar-width: thin;
+    scrollbar-color: #1D9BF0 #15202B;
+}
+
+body::-webkit-scrollbar, .trends::-webkit-scrollbar, .main-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-thumb, .trends::-webkit-scrollbar-thumb, .main-content::-webkit-scrollbar-thumb {
+    background-color: #1D9BF0;
+    border-radius: 10px;
+}
+
+body::-webkit-scrollbar-track, .trends::-webkit-scrollbar-track, .main-content::-webkit-scrollbar-track {
+    background-color: #15202B;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .trends {
+        display: none; /* Esconder trends em telas menores */
+    }
+
+    /* Melhorar espaçamento dos posts e sidebar em telas menores */
+    .post {
+        margin-bottom: 10px;
+    }
+
+    .sidebar a {
+        padding: 10px 0;
+        justify-content: center;
+    }
+
+    .sidebar .profile-section {
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .sidebar .post-button {
+        width: 90%;
+        margin: 10px auto;
+    }
+}
