@@ -7,6 +7,7 @@ body {
     flex-direction: column; /* Alterado para suportar telas pequenas */
 }
 
+/*
 .sidebar.active {
     transform: translateX(0);
 }
@@ -15,6 +16,7 @@ body {
     transform: translateX(-100%);
     display: none;
 }
+*/
 
 .sidebar {
     height: 100vh;
@@ -81,6 +83,7 @@ body {
 
 .main-content {
     margin-left: 250px;
+    margin-right: 350px; /* Adicionado para dar espaço à barra de tendências */
     padding: 20px;
     flex-grow: 1;
     background-color: #192734;
@@ -165,6 +168,7 @@ body {
     height: 100vh;
     position: fixed;
     right: 0;
+    top: 0; /* Adicionado para garantir que comece no topo */
     overflow-y: scroll;
 }
 
@@ -260,6 +264,16 @@ body::-webkit-scrollbar-track, .trends::-webkit-scrollbar-track, .main-content::
 }
 
 /* Responsividade */
+@media (max-width: 1200px) { /* Adicionado breakpoint para telas médias */
+    .main-content {
+        margin-right: 0;
+    }
+
+    .trends {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
@@ -295,4 +309,246 @@ body::-webkit-scrollbar-track, .trends::-webkit-scrollbar-track, .main-content::
         width: 90%;
         margin: 10px auto;
     }
+}
+
+.like-button,
+.share-button {
+    cursor: pointer;
+    transition: color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.like-button .like-icon,
+.share-button .share-icon {
+    margin-right: 5px;
+}
+
+.like-button:hover .like-icon,
+.like-button.liked .like-icon {
+    color: #E0245E;
+}
+
+.share-button:hover .share-icon,
+.share-button.shared .share-icon {
+    color: #17BF63;
+}
+
+.like-button.liked .like-count {
+    color: #E0245E;
+}
+
+.share-button.shared .share-count {
+    color: #17BF63;
+}
+
+.comments-section {
+  margin-top: 10px;
+  border-top: 1px solid #38444d;
+  padding-top: 10px;
+}
+
+.comment {
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comment:hover {
+  background-color: #22303c;
+}
+
+.user-comment {
+  background-color: #192734;
+}
+
+.user-comment:hover {
+  background-color: #1e3246;
+}
+
+.comment-username {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #1DA1F2;
+}
+
+.comment-timestamp {
+  font-size: 0.8em;
+  color: #8899a6;
+}
+
+.comment-form {
+  display: flex;
+  margin-top: 10px;
+}
+
+.comment-form textarea {
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #38444d;
+  border-radius: 5px;
+  background-color: #192734;
+  color: white;
+}
+
+.comment-submit {
+  padding: 5px 10px;
+  background-color: #1DA1F2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment-submit:hover {
+  background-color: #1991DB;
+}
+
+.comment-button {
+  cursor: pointer;
+}
+
+.post-box {
+  background-color: #192734;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.post-box textarea,
+.post-box .image-url-input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  resize: none;
+  margin-bottom: 10px;
+}
+
+.post-box .image-url-input {
+  border-bottom: 1px solid #38444d;
+  padding: 5px 0;
+}
+
+.post-box textarea:focus,
+.post-box .image-url-input:focus {
+  outline: none;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.post-button {
+  background-color: #1DA1F2;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.post-button:hover {
+  background-color: #1991DB;
+}
+
+.post-image {
+  max-width: 100%;
+  border-radius: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.post-image:hover {
+  opacity: 0.7;
+}
+
+.post-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  max-height: 300px; /* Altura máxima para o container da imagem */
+  overflow: hidden;
+}
+
+.post-image {
+  max-width: 100%;
+  max-height: 300px; /* Altura máxima para a imagem */
+  object-fit: contain; /* Mantém a proporção da imagem */
+  border-radius: 15px;
+}
+
+/* Estilos para o modal de imagem */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    max-height: 80%;
+    object-fit: contain;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.post-image {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.post-image:hover {
+    opacity: 0.7;
+}
+
+.post-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  max-height: 300px; /* Altura máxima para o container da imagem */
+  overflow: hidden;
+}
+
+.post-image {
+  max-width: 100%;
+  max-height: 300px; /* Altura máxima para a imagem */
+  object-fit: contain; /* Mantém a proporção da imagem */
+  border-radius: 15px;
 }

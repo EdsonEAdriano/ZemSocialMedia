@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zem - Login/Cadastro</title>
+    <link rel="stylesheet" href="/styles/home.css">
+    <link rel="stylesheet" href="/styles/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Bem-vindo ao Zem</h1>
+        <div class="form-container">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="E-mail" required>
+                <input type="password" id="loginPassword" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+        <div class="form-container">
+            <h2>Cadastro</h2>
+            <form id="signupForm">
+                <input type="text" id="signupUsername" placeholder="Nome de usuário" required>
+                <input type="email" id="signupEmail" placeholder="E-mail" required>
+                <input type="password" id="signupPassword" placeholder="Senha" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../services/database.js"></script>
+    <script src="../services/users.js"></script>
+    <script src="../services/session.js"></script>
+    <script src="/scripts/auth.js"></script>
+</body>
+</html>
