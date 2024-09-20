@@ -1,2 +1,2 @@
 # ZemSocialMedia
-School Project
+School Project to use Docker Concepts
