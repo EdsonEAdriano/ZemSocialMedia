@@ -16,7 +16,7 @@ async function handleLogin(event) {
         if (user) {
             setLoggedInUser(user);
             alert('Login bem-sucedido!');
-            window.location.href = '/src/home.html';
+            window.location.href = '/pages/home.html';
         } else {
             alert('E-mail ou senha incorretos.');
         }

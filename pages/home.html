@@ -160,7 +160,7 @@
             migrateExistingPosts().then(() => {
                 const loggedInUser = getLoggedInUser();
                 if (!loggedInUser) {
-                    window.location.href = '/src/login.html';
+                    window.location.href = '/pages/login.html';
                 } else {
                     appendPosts();
                 }
