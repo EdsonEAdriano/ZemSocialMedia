@@ -66,16 +66,16 @@ const getAllPostsWithUserInfo = async () => {
     const posts = await getAllPosts();
     const postsWithUserInfo = await Promise.all(posts.map(async (post) => {
       const user = await getUser(post.userId);
-      // Garanta que post.likes e post.shares sejam arrays
+      // Ensure that post.likes and post.shares are arrays
       if (!Array.isArray(post.likes)) post.likes = [];
       if (!Array.isArray(post.shares)) post.shares = [];
-      // Adicione o nome de usuário aos comentários
+      // Add username to comments
       if (Array.isArray(post.comments)) {
         post.comments = await Promise.all(post.comments.map(async (comment) => {
           const commentUser = await getUser(comment.userId);
           return {
             ...comment,
-            username: commentUser ? commentUser.username : 'Usuário desconhecido'
+            username: commentUser ? commentUser.username : 'Unknown User'
           };
         }));
       } else {
@@ -83,13 +83,17 @@ const getAllPostsWithUserInfo = async () => {
       }
       return {
         ...post,
-        username: user ? user.username : 'Usuário desconhecido',
+        username: user ? user.username : 'Unknown User',
         userEmail: user ? user.email : ''
       };
     }));
+
+    // Sort posts by timestamp in descending order (newest first)
+    postsWithUserInfo.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
     return postsWithUserInfo;
   } catch (error) {
-    console.error("Erro ao obter posts com informações de usuário:", error);
+    console.error("Error getting posts with user information:", error);
     return [];
   }
 };
@@ -231,7 +235,7 @@ const createPost = async (userId, message, urlImage = null) => {
     
     const request = objectStore.add(newPost);
 
-    request.onerror = (event) => reject("Erro ao criar o post");
+    request.onerror = (event) => reject("Error creating post");
     request.onsuccess = (event) => {
       newPost.id = event.target.result;
       resolve(newPost);

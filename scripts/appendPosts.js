@@ -10,10 +10,10 @@ async function appendPosts() {
   const postBox = document.createElement('div');
   postBox.className = 'post-box';
   postBox.innerHTML = `
-    <textarea placeholder="O que está acontecendo?" rows="3"></textarea>
-    <input type="text" placeholder="URL da imagem (opcional)" class="image-url-input">
+    <textarea placeholder="What's happening?" rows="3"></textarea>
+    <input type="text" placeholder="Image URL (optional)" class="image-url-input">
     <div class="post-actions">
-      <button class="post-button">Postar</button>
+      <button class="post-button">Post</button>
     </div>
   `;
   postsContainer.appendChild(postBox);
@@ -32,7 +32,7 @@ async function appendPosts() {
     postElement.className = 'post';
     postElement.innerHTML = `
       <div class="profile-info">
-        <img src="https://via.placeholder.com/40" alt="Foto de Perfil">
+        <img src="https://via.placeholder.com/40" alt="Profile Picture">
         <div>
           <span class="name">${post.username}</span>
           <span class="username">@${post.username.toLowerCase()} · ${getTimeAgo(post.timestamp)}</span>
@@ -42,7 +42,7 @@ async function appendPosts() {
         ${post.message}
         ${post.urlImage ? `
           <div class="post-image-container">
-            <img src="${post.urlImage}" alt="Imagem do post" class="post-image" onclick="openImageModal(this.src)">
+            <img src="${post.urlImage}" alt="Post image" class="post-image" onclick="openImageModal(this.src)">
           </div>
         ` : ''}
       </div>
@@ -61,8 +61,8 @@ async function appendPosts() {
       <div class="comments-section" style="display: none;">
         <div class="comments-list"></div>
         <div class="comment-form">
-          <textarea placeholder="Adicione um comentário..." rows="2"></textarea>
-          <button class="comment-submit" data-post-id="${post.id}">Comentar</button>
+          <textarea placeholder="Add a comment..." rows="2"></textarea>
+          <button class="comment-submit" data-post-id="${post.id}">Comment</button>
         </div>
       </div>
     `;
@@ -147,7 +147,7 @@ function createPostElement(post, loggedInUser) {
   postElement.className = 'post';
   postElement.innerHTML = `
     <div class="profile-info">
-      <img src="https://via.placeholder.com/40" alt="Foto de Perfil">
+      <img src="https://via.placeholder.com/40" alt="Profile Picture">
       <div>
         <span class="name">${post.username || loggedInUser.username}</span>
         <span class="username">@${(post.username || loggedInUser.username).toLowerCase()} · ${getTimeAgo(post.timestamp)}</span>
@@ -157,7 +157,7 @@ function createPostElement(post, loggedInUser) {
       ${post.message}
       ${post.urlImage ? `
         <div class="post-image-container">
-          <img src="${post.urlImage}" alt="Imagem do post" class="post-image" onclick="openImageModal(this.src)">
+          <img src="${post.urlImage}" alt="Post image" class="post-image" onclick="openImageModal(this.src)">
         </div>
       ` : ''}
     </div>
@@ -176,8 +176,8 @@ function createPostElement(post, loggedInUser) {
     <div class="comments-section" style="display: none;">
       <div class="comments-list"></div>
       <div class="comment-form">
-        <textarea placeholder="Adicione um comentário..." rows="2"></textarea>
-        <button class="comment-submit" data-post-id="${post.id}">Comentar</button>
+        <textarea placeholder="Add a comment..." rows="2"></textarea>
+        <button class="comment-submit" data-post-id="${post.id}">Comment</button>
       </div>
     </div>
   `;
@@ -277,7 +277,7 @@ function createCommentElement(comment, loggedInUserId) {
   commentElement.className = `comment ${comment.userId === loggedInUserId ? 'user-comment' : ''}`;
   commentElement.innerHTML = `
     <div class="comment-content">
-      <span class="comment-username">@${comment.username || 'Usuário desconhecido'}</span>
+      <span class="comment-username">@${comment.username || 'Unknown User'}</span>
       <span class="comment-text">${comment.text}</span>
     </div>
     <span class="comment-timestamp">${getTimeAgo(comment.timestamp)}</span>

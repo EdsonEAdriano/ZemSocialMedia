@@ -26,8 +26,8 @@
         <div class="profile-section">
             <img src="https://via.placeholder.com/40" alt="Foto de Perfil" id="profile-picture">
             <div class="profile-name">
-                <span id="profile-fullname">Nome do Perfil</span>
-                <span id="profile-username">@usuário</span>
+                <span id="profile-fullname">Profile Name</span>
+                <span id="profile-username">@user</span>
             </div>
             <button id="logout-button">Sair</button>
         </div>
@@ -37,8 +37,11 @@
     <div class="main-content">
         <!-- Post Box -->
         <div class="post-box">
-            <textarea placeholder="What's Happening?" rows="2"></textarea>
-            <button class="post-button">Post</button>
+            <textarea placeholder="What's happening?" rows="3"></textarea>
+            <input type="text" placeholder="Image URL (optional)" class="image-url-input">
+            <div class="post-actions">
+                <button class="post-button">Post</button>
+            </div>
         </div>
 
         <!-- Posts -->
