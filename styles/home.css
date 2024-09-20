@@ -552,3 +552,47 @@ body::-webkit-scrollbar-track, .trends::-webkit-scrollbar-track, .main-content::
   object-fit: contain; /* Mantém a proporção da imagem */
   border-radius: 15px;
 }
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid #38444d;
+}
+
+.profile-section img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-name {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name span:first-child {
+    font-weight: bold;
+}
+
+.profile-name span:last-child {
+    color: #8899a6;
+    font-size: 0.9em;
+}
+
+#logout-button {
+    margin-left: auto;
+    background-color: #1DA1F2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#logout-button:hover {
+    background-color: #1991DB;
+}

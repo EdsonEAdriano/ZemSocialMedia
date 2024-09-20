@@ -95,6 +95,15 @@ async function appendPosts() {
   // Adicionar event listener para o botão de postar
   postButton = document.querySelector('.post-button');
   postButton.addEventListener('click', handleNewPost);
+
+  // Atualizar a seção de perfil
+  updateProfileSection();
+
+  // Adicionar event listener para o botão de logout
+  const logoutButton = document.getElementById('logout-button');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', handleLogout);
+  }
 }
 
 // Função para lidar com novos posts
@@ -334,5 +343,35 @@ document.addEventListener('DOMContentLoaded', function() {
     if (event.target == modal) {
       closeImageModal();
     }
+  }
+});
+
+function updateProfileSection() {
+  const loggedInUser = getLoggedInUser();
+  if (loggedInUser) {
+    document.getElementById('profile-fullname').textContent = loggedInUser.username;
+    document.getElementById('profile-username').textContent = `@${loggedInUser.username.toLowerCase()}`;
+    // Se você tiver uma URL de foto de perfil, você pode definí-la aqui
+    // document.getElementById('profile-picture').src = loggedInUser.profilePictureUrl;
+  }
+}
+
+function handleLogout() {
+  // Limpar as informações do usuário do localStorage
+  localStorage.removeItem('loggedInUser');
+  // Redirecionar para a página de login
+  window.location.href = '/src/login.html';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // ... código existente ...
+
+  // Atualizar a seção de perfil
+  updateProfileSection();
+
+  // Adicionar event listener para o botão de logout
+  const logoutButton = document.getElementById('logout-button');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', handleLogout);
   }
 });
