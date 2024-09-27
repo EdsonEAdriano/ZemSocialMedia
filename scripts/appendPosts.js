@@ -1,6 +1,9 @@
+import { getAllsWithUserInfo, share, like, addComment, create } from '../services/database.js';
+import { getLoggedInUser } from '../services/session.js';
+
 async function appendPosts() {
   const postsContainer = document.querySelector('.main-content');
-  const posts = await getAllPostsWithUserInfo();
+  const posts = await getAllsWithUserInfo();
   const loggedInUser = getLoggedInUser();
 
   // Limpa o conteúdo existente antes de adicionar os posts
@@ -117,7 +120,8 @@ async function handleNewPost() {
 
   if (message) {
     try {
-      const newPost = await createPost(loggedInUser.id, message, imageUrl);
+      debugger
+      const newPost = await create(loggedInUser.id, message, imageUrl);
       
       // Limpa o textarea e o input de URL da imagem
       textarea.value = '';
@@ -219,7 +223,7 @@ async function handleLike(event) {
   }
 
   try {
-    const result = await likePost(parseInt(postId), loggedInUser.id);
+    const result = await like(parseInt(postId), loggedInUser.id);
     likeCountElement.textContent = result.likeCount;
     
     if (result.isLiked) {
@@ -244,7 +248,7 @@ async function handleShare(event) {
   }
 
   try {
-    const result = await sharePost(parseInt(postId), loggedInUser.id);
+    const result = await share(parseInt(postId), loggedInUser.id);
     shareCountElement.textContent = result.shareCount;
     
     if (result.isShared) {

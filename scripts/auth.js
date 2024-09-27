@@ -1,3 +1,6 @@
+import { authenticateUser, createUser } from '../services/database.js';
+import { setLoggedInUser } from '../services/session.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
@@ -13,6 +16,7 @@ async function handleLogin(event) {
 
     try {
         const user = await authenticateUser(email, password);
+
         if (user) {
             setLoggedInUser(user);
             alert('Login bem-sucedido!');
@@ -34,9 +38,11 @@ async function handleSignup(event) {
 
     try {
         const newUser = await createUser({ username, email, password });
+
         if (newUser) {
-            alert('Cadastro realizado com sucesso! Faça login para continuar.');
-            document.getElementById('signupForm').reset();
+            setLoggedInUser(newUser);
+            alert('Cadastro realizado com sucesso!');
+            window.location.href = '/pages/home.html';
         } else {
             alert('Não foi possível realizar o cadastro. Por favor, tente novamente.');
         }

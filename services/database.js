@@ -1,144 +1,293 @@
-let db;
-const dbName = "ZenDatabase";
-const usersTableName = "users";
-const postsTableName = "posts";
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-const dbVersion = 3; // Aumentamos a versão do banco de dados
+const API_URL = config.apiUrl;
+const PUBLIC_ANON_KEY = config.apiPublicAnonKey;
 
-const initDB = () => {
-    return new Promise((resolve, reject) => {
-        if (db) {
-            resolve(db);
-            return;
-        }
+const supabase = createClient(API_URL, PUBLIC_ANON_KEY);
 
-        const request = indexedDB.open(dbName, dbVersion);
+const add = async (data, tableName) => {
+  const { data: result, error } = await supabase
+    .from(tableName)
+    .insert(data)
+    .single();
 
-        request.onerror = (event) => reject("Erro ao abrir o banco de dados");
-
-        request.onsuccess = (event) => {
-            db = event.target.result;
-            resolve(db);
-        };
-
-        request.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            const oldVersion = event.oldVersion;
-
-            if (oldVersion < 1) {
-                const userObjectStore = db.createObjectStore(usersTableName, { keyPath: "id", autoIncrement: true });
-                userObjectStore.createIndex("email", "email", { unique: true });
-
-                db.createObjectStore(postsTableName, { keyPath: "id", autoIncrement: true });
-            }
-
-            if (oldVersion < 2) {
-                if (!db.objectStoreNames.contains("metadata")) {
-                    db.createObjectStore("metadata", { keyPath: "key" });
-                }
-            }
-        };
-    });
+  if (error) throw new Error(`Erro ao adicionar dados: ${error.message}`);
+  return result;
 };
 
-const defaultUsers = [
-    { username: "joao123", email: "joao@exemplo.com", password: "senha123", postIds: [] },
-    { username: "maria456", email: "maria@exemplo.com", password: "senha456", postIds: [] },
-    { username: "carlos789", email: "carlos@exemplo.com", password: "senha789", postIds: [] },
-];
+const get = async (id, tableName) => {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select('*')
+    .eq('id', id)
+    .single();
 
-const defaultPosts = [
-    {
-        message: "Olá, mundo!",
-        urlImage: "https://exemplo.com/imagem1.jpg",
-        likes: 10,
-        shares: 5,
-        comments: [
-            { userId: 2, text: "Ótimo post!" },
-            { userId: 3, text: "Muito legal!" }
-        ],
-        userId: 1
-    },
-    {
-        message: "Bom dia a todos!",
-        urlImage: "https://exemplo.com/imagem2.jpg",
-        likes: 15,
-        shares: 3,
-        comments: [
-            { userId: 1, text: "Bom dia!" },
-            { userId: 3, text: "Tenha um ótimo dia!" }
-        ],
-        userId: 2
-    },
-];
-
-const insertDefaultData = async () => {
-    const db = await initDB();
-    
-    // Verifica se os dados padrão já foram inseridos
-    const metadataTransaction = db.transaction(["metadata"], "readwrite");
-    const metadataStore = metadataTransaction.objectStore("metadata");
-    const defaultDataInserted = await new Promise(resolve => {
-        const request = metadataStore.get("defaultDataInserted");
-        request.onsuccess = (event) => resolve(event.target.result);
-    });
-
-    if (defaultDataInserted) {
-        console.log("Dados padrão já foram inseridos anteriormente.");
-        return;
-    }
-
-    // Usa uma única transação para todas as operações
-    const transaction = db.transaction([usersTableName, postsTableName, "metadata"], "readwrite");
-    const userStore = transaction.objectStore(usersTableName);
-    const postStore = transaction.objectStore(postsTableName);
-
-    for (const user of defaultUsers) {
-        userStore.add(user);
-    }
-
-    for (const post of defaultPosts) {
-        const request = postStore.add(post);
-        request.onsuccess = (event) => {
-            const postId = event.target.result;
-            const userRequest = userStore.get(post.userId);
-            userRequest.onsuccess = (event) => {
-                const user = event.target.result;
-                user.postIds.push(postId);
-                userStore.put(user);
-            };
-        };
-    }
-
-    // Marca que os dados padrão foram inseridos
-    metadataStore.put({ key: "defaultDataInserted", value: true });
+  if (error) throw new Error(`Erro ao obter dados: ${error.message}`);
+  return data;
 };
 
-const migrateExistingPosts = async () => {
-    const db = await initDB();
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction([postsTableName], "readwrite");
-        const objectStore = transaction.objectStore(postsTableName);
-        const request = objectStore.getAll();
+const update = async (data, tableName) => {
+  const { data: result, error } = await supabase
+    .from(tableName)
+    .update(data)
+    .eq('id', data.id)
+    .single();
 
-        request.onerror = (event) => reject("Erro ao obter posts para migração");
-        request.onsuccess = (event) => {
-            const posts = event.target.result;
-            let migratedCount = 0;
-
-            posts.forEach(post => {
-                if (!Array.isArray(post.likes)) post.likes = [];
-                if (!Array.isArray(post.shares)) post.shares = [];
-
-                const updateRequest = objectStore.put(post);
-                updateRequest.onsuccess = () => {
-                    migratedCount++;
-                    if (migratedCount === posts.length) {
-                        resolve("Migração concluída");
-                    }
-                };
-                updateRequest.onerror = () => reject("Erro ao migrar post");
-            });
-        };
-    });
+  if (error) throw new Error(`Erro ao atualizar dados: ${error.message}`);
+  return result;
 };
+
+const remove = async (id, tableName) => {
+  const { error } = await supabase
+    .from(tableName)
+    .delete()
+    .eq('id', id);
+
+  if (error) throw new Error(`Erro ao excluir dados: ${error.message}`);
+  return "Dados excluídos com sucesso";
+};
+
+const getAlls = async (tableName) => {
+  const { data, error } = await supabase
+    .from(tableName)
+    .select('*');
+
+  if (error) throw new Error(`Erro ao obter todos os dados: ${error.message}`);
+  return data;
+};
+
+const getAllsWithUserInfo = async () => {
+  try {
+    const { data: posts, error: postsError } = await supabase
+      .from('posts')
+      .select('*');
+
+    if (postsError) throw new Error(`Erro ao obter posts: ${postsError.message}`);
+
+    const postsWithUserInfo = await Promise.all(posts.map(async (post) => {
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('username, email')
+        .eq('id', post.userId)
+        .single();
+
+      if (userError) throw new Error(`Erro ao obter usuário: ${userError.message}`);
+
+      const { data: comments, error: commentsError } = await supabase
+        .from('post_comments')
+        .select('*, users(username)')
+        .eq('post_id', post.id);
+
+      if (commentsError) throw new Error(`Erro ao obter comentários: ${commentsError.message}`);
+
+      const { data: likes, error: likesError } = await supabase
+        .from('post_likes')
+        .select('user_id')
+        .eq('post_id', post.id);
+
+      if (likesError) throw new Error(`Erro ao obter likes: ${likesError.message}`);
+
+      const { data: shares, error: sharesError } = await supabase
+        .from('post_shares')
+        .select('user_id')
+        .eq('post_id', post.id);
+
+      if (sharesError) throw new Error(`Erro ao obter compartilhamentos: ${sharesError.message}`);
+
+      return {
+        ...post,
+        username: user.username,
+        userEmail: user.email,
+        comments: comments.map(comment => ({
+          ...comment,
+          username: comment.users.username
+        })),
+        likes: likes.map(like => like.user_id),
+        shares: shares.map(share => share.user_id)
+      };
+    }));
+
+    postsWithUserInfo.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    return postsWithUserInfo;
+  } catch (error) {
+    console.error("Erro ao obter posts com informações do usuário:", error);
+    return [];
+  }
+};
+
+const like = async (postId, userId) => {
+  const { data: existingLike, error: likeError } = await supabase
+    .from('post_likes')
+    .select('*')
+    .eq('post_id', postId)
+    .eq('user_id', userId)
+    .single();
+
+  if (likeError && likeError.code !== 'PGRST116') {
+    throw new Error(`Erro ao verificar like: ${likeError.message}`);
+  }
+
+  if (existingLike) {
+    const { error: deleteError } = await supabase
+      .from('post_likes')
+      .delete()
+      .eq('id', existingLike.id);
+
+    if (deleteError) throw new Error(`Erro ao remover like: ${deleteError.message}`);
+  } else {
+    const { error: insertError } = await supabase
+      .from('post_likes')
+      .insert({ post_id: postId, user_id: userId });
+
+    if (insertError) throw new Error(`Erro ao adicionar like: ${insertError.message}`);
+  }
+
+  const { count, error: countError } = await supabase
+    .from('post_likes')
+    .select('*', { count: 'exact' })
+    .eq('post_id', postId);
+
+  if (countError) throw new Error(`Erro ao contar likes: ${countError.message}`);
+
+  return {
+    likeCount: count,
+    isLiked: !existingLike
+  };
+};
+
+const share = async (postId, userId) => {
+  const { data: existingShare, error: shareError } = await supabase
+    .from('post_shares')
+    .select('*')
+    .eq('post_id', postId)
+    .eq('user_id', userId)
+    .single();
+
+  if (shareError && shareError.code !== 'PGRST116') {
+    throw new Error(`Erro ao verificar compartilhamento: ${shareError.message}`);
+  }
+
+  if (existingShare) {
+    const { error: deleteError } = await supabase
+      .from('post_shares')
+      .delete()
+      .eq('id', existingShare.id);
+
+    if (deleteError) throw new Error(`Erro ao remover compartilhamento: ${deleteError.message}`);
+  } else {
+    const { error: insertError } = await supabase
+      .from('post_shares')
+      .insert({ post_id: postId, user_id: userId });
+
+    if (insertError) throw new Error(`Erro ao adicionar compartilhamento: ${insertError.message}`);
+  }
+
+  const { count, error: countError } = await supabase
+    .from('post_shares')
+    .select('*', { count: 'exact' })
+    .eq('post_id', postId);
+
+  if (countError) throw new Error(`Erro ao contar compartilhamentos: ${countError.message}`);
+
+  return {
+    shareCount: count,
+    isShared: !existingShare
+  };
+};
+
+const addComment = async (postId, userId, comment) => {
+  const { data: newComment, error: insertError } = await supabase
+    .from('post_comments')
+    .insert({ post_id: postId, user_id: userId, text: comment })
+    .single();
+
+  if (insertError) throw new Error(`Erro ao adicionar comentário: ${insertError.message}`);
+
+  const { data: user, error: userError } = await supabase
+    .from('users')
+    .select('username')
+    .eq('id', userId)
+    .single();
+
+  if (userError) throw new Error(`Erro ao obter usuário: ${userError.message}`);
+
+  return {
+    ...newComment,
+    username: user.username
+  };
+};
+
+const create = async (userId, message, urlImage = null) => {
+  const { data: result, error } = await supabase
+    .from('posts')
+    .insert({
+      userId: userId,
+      message: message,
+      url_image: urlImage,
+      timestamp: new Date().toISOString()
+    })
+    .single();
+
+  if (error) 
+    throw new Error(`Erro ao criar post: ${error.message}`);
+
+  return result;
+};
+
+const authenticateUser = async (email, password) => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', email)
+    .single();
+
+  if (error) throw new Error(`Erro na autenticação: ${error.message}`);
+
+  if (data && data.password === password) {
+    return data;
+  }
+
+  return null;
+};
+
+const createUser = async ({ username, email, password }) => {
+  debugger
+  const { data: existingUsers, error: checkError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', email);
+
+  if (checkError) {
+    throw new Error(`Erro ao verificar usuário existente: ${checkError.message}`);
+  }
+
+  if (existingUsers && existingUsers.length > 0) {
+    throw new Error('Usuário com este e-mail já existe');
+  }
+
+  const { data: newUser, error } = await supabase
+    .from('users')
+    .insert({ username, email, password })
+    .select()
+    .single();
+
+  if (error) throw new Error(`Erro ao criar usuário: ${error.message}`);
+
+  return newUser;
+};
+
+export { 
+  add, 
+  get, 
+  update, 
+  remove, 
+  getAlls, 
+  getAllsWithUserInfo, 
+  like, 
+  share, 
+  addComment, 
+  create,
+  authenticateUser,
+  createUser
+}

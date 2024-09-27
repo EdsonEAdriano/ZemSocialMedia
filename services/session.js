@@ -10,3 +10,9 @@ const getLoggedInUser = () => {
 const clearLoggedInUser = () => {
     localStorage.removeItem('loggedInUser');
 };
+
+
+export { 
+    setLoggedInUser, 
+    getLoggedInUser
+}

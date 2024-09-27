@@ -45,7 +45,8 @@
         </div>
 
         <!-- Posts -->
-        <div class="post">
+        <!-- Exemplo de post -->
+        <!-- <div class="post">
             <div class="profile-info">
                 <img src="https://via.placeholder.com/40" alt="Profile Picture">
                 <div>
@@ -61,9 +62,10 @@
                 <span>❤️ 157</span>
                 <span>🔗</span>
             </div>
-        </div>
+        </div> -->
 
-        <div class="post">
+        <!-- Outro exemplo de post -->
+        <!-- <div class="post">
             <div class="profile-info">
                 <img src="https://via.placeholder.com/40" alt="Profile Picture">
                 <div>
@@ -79,7 +81,7 @@
                 <span>❤️ 157</span>
                 <span>🔗</span>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Trends Section -->
@@ -149,24 +151,26 @@
     </div>
 
 </body>
-<script src="../services/database.js"></script>
-<script src="../services/users.js"></script>
-<script src="../services/posts.js"></script>
+<script type="module" src="../services/database.js"></script>
 <script src="../services/session.js"></script>
-<script src="/scripts/appendPosts.js"></script>
-<script>
-    initDB().then(() => {
-        insertDefaultData().then(() => {
-            migrateExistingPosts().then(() => {
-                const loggedInUser = getLoggedInUser();
-                if (!loggedInUser) {
-                    window.location.href = '/pages/login.html';
-                } else {
-                    appendPosts();
-                }
-            }).catch(error => console.error("Erro na migração:", error));
-        });
-    });
+<script type="module" src="/scripts/appendPosts.js"></script>
+<script src="/config.js"></script>
+<script type="module">
+    import { getAlls } from "../services/database.js";
+    
+    const users = await getAlls('users');
+    const posts = await getAlls('posts');
+
+    const postComments = await getAlls('post_comments');
+    const postLikes = await getAlls('post_likes');
+    const postShares = await getAlls('post_shares');
+
+    console.log('users', users);
+    console.log('posts', posts);
+    console.log('post_comments', postComments);
+    console.log('post_likes', postLikes);
+    console.log('post_shares', postShares);
 </script>
+
 
 </html>
