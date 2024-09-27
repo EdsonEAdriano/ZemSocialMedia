@@ -155,8 +155,17 @@
 <script src="./services/session.js"></script>
 <script type="module" src="./scripts/appendPosts.js"></script>
 <script src="./config.js"></script>
-<script type="module">
+<script type="module" src="./services/session.js"></script>
+<script type="module">   
+    import { getLoggedInUser } from './services/session.js';
     import { getAlls } from "./services/database.js";
+
+    
+    if (getLoggedInUser() === null)
+        window.location.href = '/docs/login.html';
+
+
+    
     
     const users = await getAlls('users');
     const posts = await getAlls('posts');
@@ -170,6 +179,9 @@
     console.log('post_comments', postComments);
     console.log('post_likes', postLikes);
     console.log('post_shares', postShares);
+
+
+    
 </script>
 
 

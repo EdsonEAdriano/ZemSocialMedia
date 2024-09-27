@@ -227,6 +227,7 @@ const create = async (userId, message, urlImage = null) => {
       url_image: urlImage,
       timestamp: new Date().toISOString()
     })
+    .select()
     .single();
 
   if (error) 

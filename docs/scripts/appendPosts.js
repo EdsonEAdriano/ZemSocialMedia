@@ -120,7 +120,6 @@ async function handleNewPost() {
 
   if (message) {
     try {
-      debugger
       const newPost = await create(loggedInUser.id, message, imageUrl);
       
       // Limpa o textarea e o input de URL da imagem
