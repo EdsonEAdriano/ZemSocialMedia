@@ -305,7 +305,12 @@ async function handleNewComment(event) {
     const loggedInUser = getLoggedInUser();
     try {
       const newComment = await addComment(parseInt(postId), loggedInUser.id, commentText);
-      const commentElement = createCommentElement(newComment, loggedInUser.id);
+      // Modificação aqui: use o commentText em vez de newComment.text
+      const commentElement = createCommentElement({
+        ...newComment,
+        text: commentText,
+        username: loggedInUser.username
+      }, loggedInUser.id);
       const commentsListElement = postElement.querySelector('.comments-list');
       commentsListElement.appendChild(commentElement);
       
