@@ -368,7 +368,7 @@ function handleLogout() {
   // Limpar as informações do usuário do localStorage
   localStorage.removeItem('loggedInUser');
   // Redirecionar para a página de login
-  window.location.href = '/pages/login.html';
+  window.location.href = 'login.html';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
