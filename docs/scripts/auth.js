@@ -20,7 +20,7 @@ async function handleLogin(event) {
         if (user) {
             setLoggedInUser(user);
             alert('Login bem-sucedido!');
-            window.location.href = '/docs/index.html';
+            window.location.href = 'index.html';
         } else {
             alert('E-mail ou senha incorretos.');
         }
@@ -42,7 +42,7 @@ async function handleSignup(event) {
         if (newUser) {
             setLoggedInUser(newUser);
             alert('Cadastro realizado com sucesso!');
-            window.location.href = '/docs/index.html';
+            window.location.href = 'index.html';
         } else {
             alert('Não foi possível realizar o cadastro. Por favor, tente novamente.');
         }
